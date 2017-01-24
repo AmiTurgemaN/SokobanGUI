@@ -1,5 +1,8 @@
 package model.data.gameObjects;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import javafx.scene.image.Image;
 import model.data.point.GeneralIntegerPoint;
 
@@ -31,10 +34,24 @@ public class Player extends GeneralGameObject {
 
 	@Override
 	public Image getImage() {
-		if(this.onArea==true)
-			return null;//return PlayerOnArea Image
+		Image playerImage=null;
+		if(this.onArea)
+		{
+			try {
+				playerImage = new Image(new FileInputStream("resources/PlayerOnArea.png"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 		else
-			return null;//return Player Image
+		{
+			try {
+				playerImage = new Image(new FileInputStream("resources/player.png"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		return playerImage;
 	}
 	
 }

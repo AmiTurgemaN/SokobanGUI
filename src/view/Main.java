@@ -24,7 +24,7 @@ public class Main extends Application {
 			model.addObserver(controller);
 			view.addObserver(controller);
 
-			Scene scene = new Scene(root,400,400);
+			Scene scene = new Scene(root,700,750);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			view.start();

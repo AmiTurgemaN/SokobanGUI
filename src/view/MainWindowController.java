@@ -23,30 +23,15 @@ public class MainWindowController extends Observable implements View,Initializab
 	LevelDisplayer levelDisplayer;
 	
 	public MainWindowController(){
+		this.command="";
 		levelDisplayer = new LevelDisplayer();
 		levelDisplayer.requestFocus();
 	}
 	
 	public MainWindowController(Level level) {
+		this.command="";
 		levelDisplayer = new LevelDisplayer(level);
-
-		levelDisplayer.setOnKeyPressed(new EventHandler<KeyEvent>(){
-			
-			@Override
-			public void handle(KeyEvent event) {
-				if(event.getCode()==KeyCode.UP)
-					command = "Move up";
-				else if(event.getCode()==KeyCode.DOWN)
-					command = "Move down";
-				else if(event.getCode()==KeyCode.RIGHT)
-					command = "Move right";
-				else if(event.getCode()==KeyCode.LEFT)
-					command = "Move left";
-				setChanged();
-				notifyObservers(command);
-			}
-		});
-
+		displayLevel(level);
 	}
 
 	public void openFile()
@@ -90,15 +75,27 @@ public class MainWindowController extends Observable implements View,Initializab
 	@Override
 	public void start() {
 		this.levelDisplayer.redraw();
-		String command = "Display";
-		this.setChanged();
-		this.notifyObservers(command);
-		System.out.println("start");
 	}
 
 	@Override
 	public void displayLevel(Level level) {
 		levelDisplayer.setLevel(level);
+		levelDisplayer.setFocusTraversable(true);
+		levelDisplayer.setOnKeyPressed(new EventHandler<KeyEvent>(){
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode()==KeyCode.UP)
+					command = "Move up";
+				else if(event.getCode()==KeyCode.DOWN)
+					command = "Move down";
+				else if(event.getCode()==KeyCode.RIGHT)
+					command = "Move right";
+				else if(event.getCode()==KeyCode.LEFT)
+					command = "Move left";
+				setChanged();
+				notifyObservers(command);
+			}
+		});
 	}
 
 	@Override
