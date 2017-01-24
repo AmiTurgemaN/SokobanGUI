@@ -1,0 +1,108 @@
+
+C:\Users\Amit\Documents\Java Projects\Sokoban>java -classpath "Sokoban.zip" run.
+Main
+ê
+Invalid command
+l
+Invalid command
+Hello
+Invalid command
+display
+Level not loaded
+display lol
+Invalid command
+load level1.txt
+Level level1 has been loaded from txt file
+display
+####
+# o#
+#  ###
+#$A  #
+#  @ #
+#  ###
+####
+move left
+Cannot move LEFT
+move lef
+Invalid move command
+move leftttttt
+Invalid move command
+move up
+move upo
+Invalid move command
+move down
+display
+####
+# o#
+#  ###
+#$A  #
+#  @ #
+#  ###
+####
+
+load level2.txt
+Level level2 has been loaded from txt file
+display
+######
+#    #
+# #A #
+# @$ #
+# o$ #
+#    #
+######
+move right
+move down
+move down
+display
+######
+#    #
+# #  #
+# @$ #
+# o$A#
+#    #
+######
+
+move left
+display
+######
+#    #
+# #  #
+# @$ #
+# $B #
+#    #
+######
+
+move right
+move up
+move up
+move left
+move down
+move up
+move up
+move up
+Cannot move UP
+move left
+move down
+Cannot move DOWN
+display
+######
+# A  #
+# #  #
+# @o #
+# $$ #
+#    #
+######
+
+move left
+move down
+move down
+move right
+######
+#    #
+# #  #
+# A$ #
+# $$ #
+#    #
+######
+
+Level completed!
