@@ -1,21 +1,37 @@
 package view;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.URL;
 import java.util.Observable;
+import java.util.ResourceBundle;
 
+import controller.commands.LoadFile;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import model.data.level.Level;
+import model.data.level.MyTextLevelLoader;
+import view.receiver.ExitReciever;
 
-public class MainWindowController extends Observable implements View{
+public class MainWindowController extends Observable implements View,Initializable{
 
+	private String command;
+	
 	@FXML
 	LevelDisplayer levelDisplayer;
 	
-	private String command;
+	public MainWindowController(){
+		levelDisplayer = new LevelDisplayer();
+		levelDisplayer.requestFocus();
+	}
 	
 	public MainWindowController(Level level) {
 		levelDisplayer = new LevelDisplayer(level);
@@ -55,44 +71,51 @@ public class MainWindowController extends Observable implements View{
 			this.command = "load "+chosen.getName();
 			setChanged();
 			notifyObservers(command);
+			setChanged();
+			notifyObservers("Display");
 		}
 	}
 
 	@Override
 	public String getExitString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "exit";
 	}
 
 	@Override
 	public void displayError(String msg) {
-		// TODO Auto-generated method stub
-
+		System.out.println("Error: "+msg);
+		System.out.flush();
 	}
 
 	@Override
 	public void displayMessage(String msg) {
-		// TODO Auto-generated method stub
-
+		System.out.println(msg);
+		System.out.flush();
 	}
 
 	@Override
 	public void start() {
+		this.levelDisplayer.redraw();
 		String command = "Display";
 		this.setChanged();
 		this.notifyObservers(command);
+		System.out.println("start");
 	}
 
 	@Override
 	public void displayLevel(Level level) {
 		levelDisplayer.setLevel(level);
-
 	}
 
 	@Override
 	public void exit(String exitString) {
-		// TODO Auto-generated method stub
+		ExitReciever er = new ExitReciever(exitString, new PrintWriter(System.out));
+		er.action();
+	}
 
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		
 	}
 
 }

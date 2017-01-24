@@ -13,28 +13,25 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
-			//BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
-			BorderPane root = (BorderPane)loader.load();	
+
+			BorderPane root = (BorderPane)loader.load();
 			MainWindowController view = loader.getController();
-											
+
+			SokobanModel model = new SokobanModel();
+			SokobanController controller = new SokobanController(model, view);
+
+			model.addObserver(controller);
+			view.addObserver(controller);
+
 			Scene scene = new Scene(root,400,400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
-			init(view);
+			view.start();
+			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private void init(MainWindowController view) {
-		SokobanModel model = new SokobanModel();
-		SokobanController controller = new SokobanController(model, view);
-		
-		model.addObserver(controller);
-		view.addObserver(controller);
-		view.start();	
 	}
 
 	public static void main(String[] args) {

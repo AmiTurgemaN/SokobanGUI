@@ -10,7 +10,12 @@ public class LevelDisplayer extends Canvas{
 	
 	public LevelDisplayer(Level level)
 	{
-		this.level=level;
+		setLevel(level);
+	}
+	
+	public LevelDisplayer()
+	{
+		setLevel(null);
 	}
 
 	public Level getLevel() {
@@ -30,6 +35,8 @@ public class LevelDisplayer extends Canvas{
 		
 		if(this.level!=null)
 		{
+			gc.setFill(Color.BLACK);
+			gc.fillRect(0,0,this.getWidth(),this.getHeight());
 			double height = getWidth();
 			double width = getWidth();
 			double w=width/this.level.getLevelWidth();
@@ -38,7 +45,7 @@ public class LevelDisplayer extends Canvas{
 			for(int i=0;i<this.level.getLevelHeight();i++)
 				for(int j=0;j<this.level.getLevelWidth();j++)
 				{
-					gc.drawImage(this.level.getObjectsMatrix()[j][i].getImage(), j*w, i*h);
+					gc.drawImage(this.level.getObjectsMatrix()[j][i].getImage(), j*w, i*h,0.98*w,0.98*h);
 				}
 		}
 	}
