@@ -1,16 +1,11 @@
 package view;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Observable;
 import java.util.ResourceBundle;
 
-import controller.commands.LoadFile;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,7 +13,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import model.data.level.Level;
-import model.data.level.MyTextLevelLoader;
 import view.receiver.ExitReciever;
 
 public class MainWindowController extends Observable implements View,Initializable{
