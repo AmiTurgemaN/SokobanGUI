@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
@@ -21,6 +22,8 @@ public class MainWindowController extends Observable implements View,Initializab
 	
 	@FXML
 	LevelDisplayer levelDisplayer;
+	@FXML
+	Label moveCountLabel;
 	
 	public MainWindowController(){
 		this.command="";
@@ -52,6 +55,7 @@ public class MainWindowController extends Observable implements View,Initializab
 			notifyObservers(command);
 			setChanged();
 			notifyObservers("Display");
+			this.moveCountLabel.setText("Move Counter : ");
 		}
 	}
 
