@@ -160,7 +160,7 @@ public class CustomizedBorderPane extends BorderPane {
 				}
 			};
 		};
-		t.schedule(tt, 0, 1000);
+		t.schedule(tt, 1000, 1000);
 	}
 
 	public Text getTimerText() {

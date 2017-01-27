@@ -13,7 +13,16 @@ public class MyTextLevelSaver extends GeneralLevelSaver {
 	public void saveLevel(OutputStream outputStream) {
 		try {
 			PrintWriter w = new PrintWriter(outputStream);
-			w.write(level.getLevelString());
+			String [] LevelRows = level.getLevelString().split("\n");
+			for(int i=0;i<LevelRows.length;i++)
+			{
+				for(int j=0;j<LevelRows[i].length();j++)
+				{
+					w.write(LevelRows[i].charAt(j));
+				}
+				if(i!=LevelRows.length-1)
+					w.write("\r\n");
+			}
 			w.close();
 		} catch (Exception e) {
 			e.printStackTrace();

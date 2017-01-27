@@ -6,19 +6,22 @@ import java.util.Observable;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import model.data.level.Level;
+import model.data.util.Utilities;
 import view.LevelDisplayer;
 import view.receiver.ExitReciever;
 
 public class MainWindowController extends Observable implements View{
 
 	private String command;
-	
+
 	@FXML
 	CustomizedBorderPane borderPane;
 	@FXML
@@ -27,18 +30,12 @@ public class MainWindowController extends Observable implements View{
 	Label moveCountLabel;
 	@FXML
 	ImageView titleImage;
-	
+
 	public MainWindowController(){
 		this.command="";
 		levelDisplayer = new LevelDisplayer();
 		levelDisplayer.requestFocus();
 		this.borderPane=new CustomizedBorderPane();
-	}
-	
-	public MainWindowController(Level level) {
-		this.command="";
-		levelDisplayer = new LevelDisplayer(level);
-		displayLevel(level);
 	}
 
 	public void openFile()
@@ -70,6 +67,57 @@ public class MainWindowController extends Observable implements View{
 		}
 	}
 
+	public void saveFile()
+	{
+		if(this.levelDisplayer.getLevel()!=null)
+		{
+			FileChooser fc = new FileChooser();
+			fc.setTitle("Save level file");
+			fc.setInitialDirectory(new File("./Level Files"));
+			FileChooser.ExtensionFilter XmlExtension = 
+					new FileChooser.ExtensionFilter(
+							"XML Files", "*.xml");
+			FileChooser.ExtensionFilter TxtExtension = 
+					new FileChooser.ExtensionFilter(
+							"Text Files", "*.txt");
+			FileChooser.ExtensionFilter ObjExtension = 
+					new FileChooser.ExtensionFilter(
+							"Objects Files", "*.obj");
+			fc.getExtensionFilters().add(TxtExtension);
+			fc.getExtensionFilters().add(XmlExtension);
+			fc.getExtensionFilters().add(ObjExtension);
+			File chosen = fc.showSaveDialog(null);
+			if(chosen!=null)
+			{
+				this.command = "save "+chosen.getName();
+				String extension = Utilities.getExtension(chosen.getAbsolutePath());
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Level Saved");
+				alert.setHeaderText("Level Saved");
+				alert.setContentText("Level "+this.levelDisplayer.getLevel().getLevelName()+" has been saved as "+extension+" file");
+				alert.showAndWait().ifPresent(rs -> {
+				});
+				setChanged();
+				notifyObservers(command);
+				return;
+			}
+		}
+		else
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("Level is not loaded");
+			alert.setContentText("Please load file first");
+			alert.showAndWait().ifPresent(rs -> {
+			});
+		}
+	}
+
+	public void exit()
+	{
+		System.exit(0);
+	}
+	
 	@Override
 	public String getExitString() {
 		return "exit";
@@ -131,7 +179,6 @@ public class MainWindowController extends Observable implements View{
 	@Override
 	public void levelCompleted() {
 		this.borderPane.setTimerOn(false);
-		displayMessage("Level completed!");
 	}
 }
 
