@@ -9,4 +9,7 @@ public interface View{
 	void start();
 	void displayLevel(Level level);
 	void exit(String exitString);
+	void updateCounter();
+	void showLevelDetails(Level level);
+	void levelCompleted();
 }

@@ -98,4 +98,18 @@ public class CLI extends Observable implements View,Serializable{
 		ExitReciever er = new ExitReciever(exitString, out);
 		er.action();
 	}
+	@Override
+	public void updateCounter() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void showLevelDetails(Level level) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void levelCompleted() {
+		displayMessage("Level completed!");
+	}
 }

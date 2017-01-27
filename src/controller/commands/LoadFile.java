@@ -110,12 +110,13 @@ public class LoadFile extends GeneralCommand {
 			model.setLevel(null);
 			return;
 		}
+		this.view.showLevelDetails(this.model.getLevel());
 		if(this.model.getLevel().getLevelName()!="")
 			view.displayMessage("Level "+model.getLevel().getLevelName()+" has been loaded from "+Utilities.getExtension(fileName)+" file");
 		if(this.model.getLevel().checkLevelCompleted())
 		{
 			view.displayLevel(this.model.getLevel());
-			view.displayMessage("Level completed!");
+			view.levelCompleted();
 		}
 	}
 }

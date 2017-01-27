@@ -2,33 +2,37 @@ package view;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.util.Observable;
-import java.util.ResourceBundle;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import model.data.level.Level;
+import view.LevelDisplayer;
 import view.receiver.ExitReciever;
 
-public class MainWindowController extends Observable implements View,Initializable{
+public class MainWindowController extends Observable implements View{
 
 	private String command;
 	
 	@FXML
+	CustomizedBorderPane borderPane;
+	@FXML
 	LevelDisplayer levelDisplayer;
 	@FXML
 	Label moveCountLabel;
+	@FXML
+	ImageView titleImage;
 	
 	public MainWindowController(){
 		this.command="";
 		levelDisplayer = new LevelDisplayer();
 		levelDisplayer.requestFocus();
+		this.borderPane=new CustomizedBorderPane();
 	}
 	
 	public MainWindowController(Level level) {
@@ -50,12 +54,19 @@ public class MainWindowController extends Observable implements View,Initializab
 		File chosen = fc.showOpenDialog(null);
 		if(chosen!=null)
 		{
+			this.borderPane.setTimerOn(false);
+			if(this.borderPane.getT()!=null)
+			{
+				this.borderPane.getT().cancel();
+				this.borderPane.getT().purge();
+				this.borderPane.getTt().cancel();
+			}
 			this.command = "load "+chosen.getName();
 			setChanged();
 			notifyObservers(command);
 			setChanged();
 			notifyObservers("Display");
-			this.moveCountLabel.setText("Move Counter : ");
+			this.borderPane.setTimerOn(true);
 		}
 	}
 
@@ -66,8 +77,7 @@ public class MainWindowController extends Observable implements View,Initializab
 
 	@Override
 	public void displayError(String msg) {
-		System.out.println("Error: "+msg);
-		System.out.flush();
+		this.borderPane.errorString.set("Error : "+msg);
 	}
 
 	@Override
@@ -109,9 +119,19 @@ public class MainWindowController extends Observable implements View,Initializab
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		
+	public void updateCounter() {
+		this.borderPane.updateMoveCounter();
 	}
 
+	@Override
+	public void showLevelDetails(Level level) {
+		this.borderPane.showLevelDetails(level.getLevelName());
+	}
+
+	@Override
+	public void levelCompleted() {
+		this.borderPane.setTimerOn(false);
+		displayMessage("Level completed!");
+	}
 }
 

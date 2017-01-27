@@ -2,7 +2,9 @@ package view;
 	
 import controller.SokobanController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model.SokobanModel;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -29,6 +31,12 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			view.start();
 			primaryStage.show();
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent event) {
+					System.exit(0);
+				}
+			});
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

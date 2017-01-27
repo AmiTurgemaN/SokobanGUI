@@ -60,11 +60,14 @@ public class Move extends GeneralCommand {
 			if(!this.model.move(direction))
 				view.displayError("Cannot move "+this.direction.toString());
 			else
+			{
 				view.displayLevel(model.getLevel());
+				view.updateCounter();
+			}
 			if(this.model.getLevel().isCompleted())
 			{
 				view.displayLevel(this.model.getLevel());
-				view.displayMessage("Level completed!");
+				view.levelCompleted();
 			}
 		}
 		else
