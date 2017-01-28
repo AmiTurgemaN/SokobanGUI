@@ -6,15 +6,15 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.Observable;
 
-public class Server extends Observable{
+
+public class Server extends Observable {
 	private int port;
 	private ClientHandler ch;
-	private volatile boolean stop;
+
 
 	public Server(int port,ClientHandler ch) {
 		this.port=port;
 		this.ch=ch;
-		this.stop=false;
 	}
 
 	public void start()
@@ -33,33 +33,26 @@ public class Server extends Observable{
 		}).start();
 	}
 
+	@SuppressWarnings("resource")
 	protected void runServer() throws Exception{
 		ServerSocket server = new ServerSocket(port);
-		server.setSoTimeout(1000);
-		while(!stop)
+		try
 		{
-			try
-			{
-				Socket aClient=server.accept();
-				try {
-					ch.handleClinet(aClient.getInputStream(), aClient.getOutputStream());
-					aClient.getInputStream().close();
-					aClient.getOutputStream().close();
-					aClient.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			catch(SocketTimeoutException e)
-			{
+			System.out.println("Waiting for user to connect");
+			Socket aClient=server.accept();
+			try {
+				System.out.println("User Connected");
+				ch.handleClinet(aClient.getInputStream(), aClient.getOutputStream(),"exit");
+				System.out.println("User Disconnected");
+				aClient.close();
+				System.exit(0);
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		server.close();
-	}
-
-	public void stop()
-	{
-		this.stop=true;
+		catch(SocketTimeoutException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

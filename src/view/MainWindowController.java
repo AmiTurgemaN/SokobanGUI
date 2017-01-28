@@ -1,6 +1,8 @@
 package view;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Observable;
 
@@ -9,8 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import model.data.level.Level;
@@ -28,14 +28,30 @@ public class MainWindowController extends Observable implements View{
 	LevelDisplayer levelDisplayer;
 	@FXML
 	Label moveCountLabel;
-	@FXML
-	ImageView titleImage;
+	
+	private Keys keys;
+	private String exitString;
+	
+	public void setExitString(String exitString) {
+		this.exitString = exitString;
+	}
 
 	public MainWindowController(){
 		this.command="";
 		levelDisplayer = new LevelDisplayer();
 		levelDisplayer.requestFocus();
 		this.borderPane=new CustomizedBorderPane();
+		initKeys();
+	}
+
+	private void initKeys() {
+		this.keys=null;
+		try {
+			keys = new Keys(new FileInputStream("Hash Maps/keysHashMap.obj"));
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void openFile()
@@ -115,23 +131,23 @@ public class MainWindowController extends Observable implements View{
 
 	public void exit()
 	{
+		setChanged();
+		notifyObservers("exit");
 		System.exit(0);
 	}
 	
 	@Override
 	public String getExitString() {
-		return "exit";
+		return this.exitString;
 	}
 
 	@Override
 	public void displayError(String msg) {
-		this.borderPane.errorString.set("Error : "+msg);
+		this.borderPane.getErrorString().set("Error : "+msg);
 	}
 
 	@Override
 	public void displayMessage(String msg) {
-		System.out.println(msg);
-		System.out.flush();
 	}
 
 	@Override
@@ -146,13 +162,13 @@ public class MainWindowController extends Observable implements View{
 		levelDisplayer.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override
 			public void handle(KeyEvent event) {
-				if(event.getCode()==KeyCode.UP)
+				if(event.getCode()==keys.getKeysMap().get("up"))
 					command = "Move up";
-				else if(event.getCode()==KeyCode.DOWN)
+				else if(event.getCode()==keys.getKeysMap().get("down"))
 					command = "Move down";
-				else if(event.getCode()==KeyCode.RIGHT)
+				else if(event.getCode()==keys.getKeysMap().get("right"))
 					command = "Move right";
-				else if(event.getCode()==KeyCode.LEFT)
+				else if(event.getCode()==keys.getKeysMap().get("left"))
 					command = "Move left";
 				setChanged();
 				notifyObservers(command);
@@ -173,7 +189,7 @@ public class MainWindowController extends Observable implements View{
 
 	@Override
 	public void showLevelDetails(Level level) {
-		this.borderPane.showLevelDetails(level.getLevelName());
+		this.borderPane.showLevelDetails(level);
 	}
 
 	@Override

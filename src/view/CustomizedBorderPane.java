@@ -6,10 +6,10 @@ import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.image.Image;
@@ -19,34 +19,26 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import model.data.level.Level;
 
 public class CustomizedBorderPane extends BorderPane {
 
-	@FXML
 	ImageView titleImage;
-
-	@FXML
 	Text levelNameText;
-
-	@FXML
 	Text timerText;
-
-	@FXML
 	Text moveCounterText;
-
-	@FXML
 	Text errorText;
 
-	public StringProperty timerString;
-	public StringProperty moveCountString;
-	public StringProperty levelNameString;
-	public StringProperty errorString;
+	private StringProperty moveCountString;
+	private StringProperty levelNameString;
+	private StringProperty errorString;
 	private int moveCount;
 	private int seconds,minutes,hours;
 	private Timer t;
 	private TimerTask tt;
 	private boolean isTimerOn;
 	private String levelName;
+	private StringProperty timerString;
 
 	public Text getErrorText() {
 		return errorText;
@@ -90,20 +82,20 @@ public class CustomizedBorderPane extends BorderPane {
 
 	public CustomizedBorderPane() {
 		try {
-			titleImage= new ImageView(new Image(new FileInputStream("resources/title.png")));
+			titleImage= new ImageView(new Image(new FileInputStream("resources/titleWithIcon.png")));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		this.setCenter(titleImage);
 	}
 
-	public void startLevel()
+	public void startLevel(Level level)
 	{
 		levelNameText = new Text(this.levelName);
-		levelNameText.setFont(new Font("Arial", 40));
+		levelNameText.setFont(new Font("Arial", 60));
 		levelNameString = new SimpleStringProperty(levelNameText.getText());
 		levelNameText.textProperty().bind(levelNameString);
-		GridPane grid = addGridPane();
+		GridPane grid = addGridPane(level);
 		Platform.runLater(new Runnable(){
 			@Override
 			public void run() {
@@ -227,9 +219,9 @@ public class CustomizedBorderPane extends BorderPane {
 		this.isTimerOn = isTimerOn;
 	}
 
-	public void showLevelDetails(String levelName) {
-		this.levelName=levelName;
-		this.startLevel();
+	public void showLevelDetails(Level level) {
+		this.levelName=level.getLevelName();
+		this.startLevel(level);
 	}
 
 	public Text getLevelNameText() {
@@ -261,7 +253,7 @@ public class CustomizedBorderPane extends BorderPane {
 		this.errorString.set("");
 	}
 
-	public GridPane addGridPane()
+	public GridPane addGridPane(Level level)
 	{
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
@@ -276,14 +268,14 @@ public class CustomizedBorderPane extends BorderPane {
 		timerText.setFill(Color.BLACK);
 		GridPane.setValignment(timerText, VPos.BOTTOM);
 		grid.add(timerText, 0, 2); 
-
+		
 		errorText = new Text();
 		errorText.setFont(new Font("Arial", 18));
 		errorString = new SimpleStringProperty(errorText.getText());
 		errorText.textProperty().bind(errorString);
 		errorText.setFill(Color.RED);
 		GridPane.setValignment(errorText, VPos.CENTER);
-		grid.add(errorText, 13, 2); 
+		grid.add(errorText, 11, 2); 
 
 		moveCounterText = new Text();
 		moveCounterText.setFont(new Font("Arial", 14));
@@ -292,7 +284,7 @@ public class CustomizedBorderPane extends BorderPane {
 		moveCounterText.setFill(Color.BLACK);
 		GridPane.setValignment(moveCounterText, VPos.BOTTOM);
 		grid.add(moveCounterText, 0, 3);
-
+		
 		return grid;
 	}
 }

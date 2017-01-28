@@ -1,12 +1,18 @@
 package view;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import model.data.level.Level;
 
 public class LevelDisplayer extends Canvas{
 	private Level level;
+	private Image image;
 
 	public LevelDisplayer(Level level)
 	{
@@ -58,5 +64,31 @@ public class LevelDisplayer extends Canvas{
 					}
 				}
 		}
+		else
+		{
+			choosePlayerImage();
+		}
 	}
+
+	private void choosePlayerImage() {
+		ChoiceBox<String> cb = new ChoiceBox<>();
+		cb.getItems().addAll("Ogre Magi","Rubick","EarthShaker");
+		cb.setValue("Ogre Magi");
+		cb.setOnAction(e->{
+		           try {
+					this.changePicture(cb.getValue());
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		});
+	}
+
+	private void changePicture(String value) throws FileNotFoundException {
+		if(value.equals("Ogre Magi"))
+			this.image = new Image(new FileInputStream("resources/Ogre Magi.png"));
+		else
+			this.image=null;
+	}
+
 }

@@ -31,7 +31,7 @@ public class Controller {
 					try {
 						Command cmd = queue.poll(1, TimeUnit.SECONDS);
 						if (cmd != null)
-							cmd.execute();						
+							cmd.execute();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
