@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="1.8.0_101" class="java.beans.XMLDecoder">
+<java version="1.8.0_121" class="java.beans.XMLDecoder">
  <object class="model.data.level.Level">
   <void property="levelHeight">
    <int>7</int>
@@ -143,6 +143,16 @@
        <object class="model.data.gameObjects.Box">
         <void property="onArea">
          <boolean>true</boolean>
+        </void>
+        <void property="point">
+         <object class="model.data.point.Point2D">
+          <void property="x">
+           <int>1</int>
+          </void>
+          <void property="y">
+           <int>3</int>
+          </void>
+         </object>
         </void>
        </object>
       </void>
@@ -345,7 +355,18 @@
        </object>
       </void>
       <void index="4">
-       <object class="model.data.gameObjects.Box"/>
+       <object class="model.data.gameObjects.Box">
+        <void property="point">
+         <object class="model.data.point.Point2D">
+          <void property="x">
+           <int>3</int>
+          </void>
+          <void property="y">
+           <int>4</int>
+          </void>
+         </object>
+        </void>
+       </object>
       </void>
       <void index="5">
        <object class="model.data.gameObjects.Wall">

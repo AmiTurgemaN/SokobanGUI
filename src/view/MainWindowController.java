@@ -10,8 +10,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import model.data.level.Level;
 import model.data.util.Utilities;
@@ -28,6 +30,10 @@ public class MainWindowController extends Observable implements View{
 	LevelDisplayer levelDisplayer;
 	@FXML
 	Label moveCountLabel;
+	@FXML
+	BorderPane playersBorderPane;
+	Image image;
+	playersBorderPane players;
 	
 	private Keys keys;
 	private String exitString;
@@ -42,8 +48,15 @@ public class MainWindowController extends Observable implements View{
 		levelDisplayer.requestFocus();
 		this.borderPane=new CustomizedBorderPane();
 		initKeys();
+		players = new playersBorderPane();
 	}
 
+	public void changePlayer()
+	{
+		players.setStage();
+	}
+
+	
 	private void initKeys() {
 		this.keys=null;
 		try {

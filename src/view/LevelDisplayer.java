@@ -1,18 +1,12 @@
 package view;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import model.data.level.Level;
 
 public class LevelDisplayer extends Canvas{
 	private Level level;
-	private Image image;
 
 	public LevelDisplayer(Level level)
 	{
@@ -57,38 +51,17 @@ public class LevelDisplayer extends Canvas{
 				{
 					if(j<=levelRows[i].lastIndexOf('#') && j>=levelRows[i].indexOf('#'))
 					{
-						gc.setFill(Color.BLACK);
-						gc.fillRect(j*w+0.9995*w+diff*w, i*h, 0.005*w, 0.995*h);
-						gc.fillRect(j*w+diff*w, i*h+0.995*h, 0.995*w, 0.005*h);
-						gc.drawImage(this.level.getObjectsMatrix()[j][i].getImage(), j*w+diff*w, i*h,0.995*w,0.995*h);
+						//gc.setFill(Color.BLACK);
+						//gc.fillRect(j*w+0.9995*w+diff*w, i*h, 02, 0.995*h);
+						//gc.fillRect(j*w+diff*w, i*h+0.995*h, 0.995*w, 0.005*h);
+						//gc.fillRect(j*w+diff*w, i*h+h, w, h);
+						gc.drawImage(this.level.getObjectsMatrix()[j][i].getImage(), j*w+diff*w, i*h,w,h);
 					}
 				}
 		}
-		else
-		{
-			choosePlayerImage();
-		}
 	}
 
-	private void choosePlayerImage() {
-		ChoiceBox<String> cb = new ChoiceBox<>();
-		cb.getItems().addAll("Ogre Magi","Rubick","EarthShaker");
-		cb.setValue("Ogre Magi");
-		cb.setOnAction(e->{
-		           try {
-					this.changePicture(cb.getValue());
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-		});
-	}
 
-	private void changePicture(String value) throws FileNotFoundException {
-		if(value.equals("Ogre Magi"))
-			this.image = new Image(new FileInputStream("resources/Ogre Magi.png"));
-		else
-			this.image=null;
-	}
+
 
 }
