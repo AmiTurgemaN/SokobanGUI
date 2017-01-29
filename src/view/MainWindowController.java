@@ -12,9 +12,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import model.data.level.Level;
 import model.data.util.Utilities;
 import view.LevelDisplayer;
@@ -23,6 +27,7 @@ import view.receiver.ExitReciever;
 public class MainWindowController extends Observable implements View{
 
 	private String command;
+	private String restartLevel;
 
 	@FXML
 	CustomizedBorderPane borderPane;
@@ -31,19 +36,27 @@ public class MainWindowController extends Observable implements View{
 	@FXML
 	Label moveCountLabel;
 	@FXML
-	BorderPane playersBorderPane;
 	Image image;
+	@FXML
+	MediaView mediaView;
+	@FXML
+	MenuItem soundMenu;
 	playersBorderPane players;
-	
+	MediaPlayer mediaPlayer;
+	AboutWindow aboutWindow;
+
 	private Keys keys;
 	private String exitString;
-	
+	private boolean playingSound;
 	public void setExitString(String exitString) {
 		this.exitString = exitString;
 	}
 
 	public MainWindowController(){
 		this.command="";
+		this.restartLevel="";
+		this.playingSound=true;
+		initMusic();
 		levelDisplayer = new LevelDisplayer();
 		levelDisplayer.requestFocus();
 		this.borderPane=new CustomizedBorderPane();
@@ -51,12 +64,44 @@ public class MainWindowController extends Observable implements View{
 		players = new playersBorderPane();
 	}
 
+
+	private void initMusic() {
+		String path = "resources/dotaMusic.mp3";
+		Media media = new Media(new File(path).toURI().toString());
+		if(mediaPlayer!=null)
+			this.mediaPlayer.stop();
+		mediaPlayer = new MediaPlayer(media);
+		mediaPlayer.setOnEndOfMedia(new Runnable() {
+			public void run() {
+				mediaPlayer.seek(Duration.ZERO);
+			}
+		});
+		this.mediaView = new MediaView(mediaPlayer);
+	}
+
+	public void sound()
+	{
+		if(this.playingSound==true)
+		{
+			if(mediaView.getMediaPlayer()!=null)
+				mediaView.getMediaPlayer().stop();
+			this.playingSound=false;
+			this.soundMenu.setText("Enable Sound");
+		}
+		else
+		{	if(mediaView.getMediaPlayer()!=null)
+				mediaView.getMediaPlayer().play();
+			this.playingSound=true;
+			this.soundMenu.setText("Disable Sound");
+		}
+	}
+
 	public void changePlayer()
 	{
+		players.setLevelDisplayer(levelDisplayer);
 		players.setStage();
 	}
 
-	
 	private void initKeys() {
 		this.keys=null;
 		try {
@@ -64,6 +109,42 @@ public class MainWindowController extends Observable implements View{
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	public void about()
+	{
+		aboutWindow = new AboutWindow();
+	}
+
+	public void restartLevel()
+	{
+		if(!restartLevel.equals(""))
+		{
+			this.borderPane.setTimerOn(false);
+			if(this.borderPane.getT()!=null)
+			{
+				this.borderPane.getT().cancel();
+				this.borderPane.getT().purge();
+				this.borderPane.getTt().cancel();
+			}
+			initMusic();
+			if(this.playingSound==true)
+				mediaView.getMediaPlayer().setAutoPlay(true);
+			setChanged();
+			notifyObservers(restartLevel);
+			setChanged();
+			notifyObservers("Display");
+			this.borderPane.setTimerOn(true);
+		}
+		else
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("Level is not loaded");
+			alert.setContentText("Please load file first");
+			alert.showAndWait().ifPresent(rs -> {
+			});
 		}
 	}
 
@@ -87,7 +168,11 @@ public class MainWindowController extends Observable implements View{
 				this.borderPane.getT().purge();
 				this.borderPane.getTt().cancel();
 			}
+			initMusic();
+			if(this.playingSound==true)
+				mediaView.getMediaPlayer().setAutoPlay(true);
 			this.command = "load "+chosen.getName();
+			this.restartLevel="load "+chosen.getName();
 			setChanged();
 			notifyObservers(command);
 			setChanged();
@@ -148,7 +233,7 @@ public class MainWindowController extends Observable implements View{
 		notifyObservers("exit");
 		System.exit(0);
 	}
-	
+
 	@Override
 	public String getExitString() {
 		return this.exitString;
@@ -170,6 +255,7 @@ public class MainWindowController extends Observable implements View{
 
 	@Override
 	public void displayLevel(Level level) {
+		levelDisplayer.setPlayer(this.players.getChosen());
 		levelDisplayer.setLevel(level);
 		levelDisplayer.setFocusTraversable(true);
 		levelDisplayer.setOnKeyPressed(new EventHandler<KeyEvent>(){
@@ -208,6 +294,18 @@ public class MainWindowController extends Observable implements View{
 	@Override
 	public void levelCompleted() {
 		this.borderPane.setTimerOn(false);
+		String path = "resources/completedDotaMusic.mp3";
+		Media media = new Media(new File(path).toURI().toString());
+		this.mediaPlayer.stop();
+		mediaPlayer = new MediaPlayer(media);
+		mediaPlayer.setOnEndOfMedia(new Runnable() {
+			public void run() {
+				mediaPlayer.seek(Duration.ZERO);
+			}
+		});
+		if(playingSound)
+			mediaPlayer.setAutoPlay(true);
+		this.mediaView = new MediaView(mediaPlayer);
 	}
 }
 

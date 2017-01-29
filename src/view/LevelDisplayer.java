@@ -1,12 +1,25 @@
 package view;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import model.data.level.Level;
 
 public class LevelDisplayer extends Canvas{
 	private Level level;
+	private String player;
+
+	public String getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(String player) {
+		this.player = player;
+	}
 
 	public LevelDisplayer(Level level)
 	{
@@ -51,17 +64,69 @@ public class LevelDisplayer extends Canvas{
 				{
 					if(j<=levelRows[i].lastIndexOf('#') && j>=levelRows[i].indexOf('#'))
 					{
-						//gc.setFill(Color.BLACK);
-						//gc.fillRect(j*w+0.9995*w+diff*w, i*h, 02, 0.995*h);
-						//gc.fillRect(j*w+diff*w, i*h+0.995*h, 0.995*w, 0.005*h);
-						//gc.fillRect(j*w+diff*w, i*h+h, w, h);
-						gc.drawImage(this.level.getObjectsMatrix()[j][i].getImage(), j*w+diff*w, i*h,w,h);
+						if(!isPlayer(i,j) || (isPlayer(i, j) && (this.player==null || this.player.equals("Ogre Magi"))))
+							gc.drawImage(this.level.getObjectsMatrix()[j][i].getImage(), j*w+diff*w, i*h,w,h);
+						else
+						{
+							drawWithAnotherPlayer( gc,i, j,h,w,diff);
+						}
 					}
 				}
 		}
 	}
 
+	private boolean isPlayer(int i, int j) {
+		if(this.level.getObjectsMatrix()[j][i].getSymbol()=='A' || this.level.getObjectsMatrix()[j][i].getSymbol()=='B')
+			return true;
+		return false;
+	}
 
-
+	private void drawWithAnotherPlayer(GraphicsContext gc,int i, int j,double h,double w,double diff) {
+		Image image = null;
+		int xPoint = this.level.getObjectsMatrix()[j][i].getPoint().getX();
+		int yPoint = this.level.getObjectsMatrix()[j][i].getPoint().getY();
+		boolean isOnArea = this.level.getObjectsMatrix()[j][i].isOnArea();
+		try{
+			if(this.player.equals("Rubick"))
+			{
+				if((xPoint%2==0 && yPoint%2==0) || (xPoint%2==1 && yPoint%2==1))
+				{
+					if(!isOnArea)
+						image = new Image(new FileInputStream("resources/Rubick.png"));
+					else
+						image = new Image(new FileInputStream("resources/Rubick area.png"));
+				}
+				else
+				{
+					if(!isOnArea)
+						image = new Image(new FileInputStream("resources/Rubick black.png"));
+					else
+						image = new Image(new FileInputStream("resources/Rubick black area.png"));
+				}
+			}
+			else if(this.player.equals("Earthshaker"))
+			{
+				if((xPoint%2==0 && yPoint%2==0) || (xPoint%2==1 && yPoint%2==1))
+				{
+					if(!isOnArea)
+						image = new Image(new FileInputStream("resources/Earthshaker.png"));
+					else
+						image = new Image(new FileInputStream("resources/es white area.png"));
+				}
+				else
+				{
+					if(!isOnArea)
+						image = new Image(new FileInputStream("resources/es black.png"));
+					else
+						image = new Image(new FileInputStream("resources/es black area.png"));
+				}
+			}
+		}
+		catch(FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		gc.drawImage(image, j*w+diff*w, i*h,w,h);
+	}
 
 }

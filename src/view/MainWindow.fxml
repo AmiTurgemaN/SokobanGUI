@@ -10,10 +10,13 @@
 <?import javafx.scene.image.ImageView?>
 <?import view.CustomizedBorderPane?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.media.MediaView?>
 
 <BorderPane maxHeight="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.111"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
 	<center>
+		<MediaView fx:id="mediaView" BorderPane.alignment="CENTER">
+		</MediaView>
 		<CustomizedBorderPane fx:id="borderPane"
 			prefHeight="150.0" prefWidth="700" BorderPane.alignment="CENTER">
 		</CustomizedBorderPane>
@@ -31,15 +34,20 @@
 							text="Open File" />
 						<MenuItem mnemonicParsing="false" onAction="#saveFile"
 							text="Save File" />
+						<MenuItem mnemonicParsing="false" onAction="#restartLevel"
+							text="Restart Level" />
 						<MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Edit">
-					<MenuItem mnemonicParsing="false" onAction="#changePlayer" text="Change Player" />
+					<MenuItem mnemonicParsing="false" onAction="#changePlayer"
+						text="Change Player" />
+					<MenuItem fx:id="soundMenu" mnemonicParsing="false" onAction="#sound"
+						text="Disable Sound"/>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Help">
 					<items>
-						<MenuItem mnemonicParsing="false" text="About" />
+						<MenuItem mnemonicParsing="false" text="About" onAction="#about" />
 					</items>
 				</Menu>
 			</menus>

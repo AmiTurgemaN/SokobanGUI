@@ -19,8 +19,29 @@ public class playersBorderPane extends BorderPane {
 	private Image image;
 	private Image picImage;
 	private Scene scene;
+	private LevelDisplayer levelDisplayer;
 
 	
+	public String getChosen() {
+		return chosen;
+	}
+
+	public void setChosen(String chosen) {
+		this.chosen = chosen;
+	}
+
+	public Image getPicImage() {
+		return picImage;
+	}
+
+	public void setPicImage(Image picImage) {
+		this.picImage = picImage;
+	}
+
+	public void setScene(Scene scene) {
+		this.scene = scene;
+	}
+
 	public Image getImage() {
 		return image;
 	}
@@ -34,9 +55,17 @@ public class playersBorderPane extends BorderPane {
 		scene = new Scene(this,200,200);
 	}
 	
+	public LevelDisplayer getLevelDisplayer() {
+		return levelDisplayer;
+	}
+
+	public void setLevelDisplayer(LevelDisplayer levelDisplayer) {
+		this.levelDisplayer = levelDisplayer;
+	}
+
 	public void setStage()
 	{
-		creatingWindow();
+		creatingWindow(); 
 	}
 	
 	private void creatingWindow() {
@@ -66,12 +95,14 @@ public class playersBorderPane extends BorderPane {
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setScene(scene);
 		stage.setOnCloseRequest(e->{
-			this.image=null;
-			this.chosen=null;
+			stage.close();
 		});
 		button.setOnAction(e-> {
+			this.chosen=cb.getValue();
 			this.image=picImage;
 			stage.close();
+			this.levelDisplayer.setPlayer(chosen);
+			this.levelDisplayer.redraw();
 		});
 		try {
 			stage.getIcons().add(new Image(new FileInputStream("resources/playersIcon.png")));
@@ -90,7 +121,6 @@ public class playersBorderPane extends BorderPane {
 			picImage = new Image(new FileInputStream("resources/Rubick.png"));
 		else if(value.equals("Earthshaker"))
 			picImage = new Image(new FileInputStream("resources/Earthshaker.png"));
-		this.chosen=value;
 		ImageView playerImage = new ImageView(picImage);
 		playerImage.setFitHeight(130);
 		playerImage.setFitWidth(150);
