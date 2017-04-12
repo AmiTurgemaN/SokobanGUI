@@ -3,15 +3,18 @@ package view;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
+import db.Game;
+import db.GameManager;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -19,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import model.data.level.Level;
 
 public class CustomizedBorderPane extends BorderPane {
@@ -28,6 +32,7 @@ public class CustomizedBorderPane extends BorderPane {
 	Text timerText;
 	Text moveCounterText;
 	Text errorText;
+	TextInputDialog dialog;
 
 	private StringProperty moveCountString;
 	private StringProperty levelNameString;
@@ -104,11 +109,12 @@ public class CustomizedBorderPane extends BorderPane {
 				setBottom(grid);
 			}
 		});
+
 		this.moveCount=0;
 		this.seconds=0;
 		this.minutes=0;
 		this.hours=0;
-		startTimer();
+		startTimer(level);
 		startMoveCount();
 	}
 
@@ -124,7 +130,7 @@ public class CustomizedBorderPane extends BorderPane {
 		this.moveCount = moveCount;
 	}
 
-	protected void startTimer() {
+	protected void startTimer(Level level) {
 		DecimalFormat df = new DecimalFormat("00");
 		t = new Timer();
 		tt = new TimerTask(){
@@ -268,7 +274,7 @@ public class CustomizedBorderPane extends BorderPane {
 		timerText.setFill(Color.BLACK);
 		GridPane.setValignment(timerText, VPos.BOTTOM);
 		grid.add(timerText, 0, 2); 
-		
+
 		errorText = new Text();
 		errorText.setFont(new Font("Arial", 18));
 		errorString = new SimpleStringProperty(errorText.getText());
@@ -284,7 +290,32 @@ public class CustomizedBorderPane extends BorderPane {
 		moveCounterText.setFill(Color.BLACK);
 		GridPane.setValignment(moveCounterText, VPos.BOTTOM);
 		grid.add(moveCounterText, 0, 3);
-		
+
 		return grid;
+	}
+
+	public void openDialog() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				DecimalFormat df = new DecimalFormat("00");
+				dialog = new TextInputDialog();
+				dialog.setTitle("Level completed");
+				dialog.setHeaderText("Number of moves : "+moveCount+"\nTotal time : "+df.format(hours)+":"+df.format(minutes)+":"+df.format(seconds));
+				dialog.setContentText("Please enter your name:");
+				Stage stage=(Stage)dialog.getDialogPane().getScene().getWindow();
+				try {
+					stage.getIcons().add(new Image(new FileInputStream("resources/addPlayer.png")));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				Optional<String> result = dialog.showAndWait();
+				if (result.isPresent()){
+					Game game = new Game(dialog.getResult(), levelName, moveCount, seconds+60*(minutes+60*hours));
+					GameManager gameManager = new GameManager(game);
+					gameManager.addGame();
+				}
+			}
+		});
 	}
 }

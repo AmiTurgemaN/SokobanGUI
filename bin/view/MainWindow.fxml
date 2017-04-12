@@ -45,6 +45,12 @@
 					<MenuItem fx:id="soundMenu" mnemonicParsing="false" onAction="#sound"
 						text="Disable Sound"/>
 				</Menu>
+				<Menu mnemonicParsing="false" text="Records">
+					<items>
+						<MenuItem mnemonicParsing="false" text="Records - Current Level" onAction="#recordsCurrentLevel" />
+						<MenuItem mnemonicParsing="false" text="Records - WorldWide" onAction="#recordsWorldWide" />
+					</items>
+				</Menu>
 				<Menu mnemonicParsing="false" text="Help">
 					<items>
 						<MenuItem mnemonicParsing="false" text="About" onAction="#about" />

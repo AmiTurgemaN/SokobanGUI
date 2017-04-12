@@ -44,6 +44,7 @@ public class MainWindowController extends Observable implements View{
 	playersBorderPane players;
 	MediaPlayer mediaPlayer;
 	AboutWindow aboutWindow;
+	
 
 	private Keys keys;
 	private String exitString;
@@ -107,7 +108,6 @@ public class MainWindowController extends Observable implements View{
 		try {
 			keys = new Keys(new FileInputStream("Hash Maps/keysHashMap.obj"));
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -116,7 +116,28 @@ public class MainWindowController extends Observable implements View{
 	{
 		aboutWindow = new AboutWindow();
 	}
-
+	
+	public void recordsCurrentLevel()
+	{ 
+		if(this.levelDisplayer.getLevel()!=null)
+		{
+			new Record(borderPane.getLevelName());
+		}
+		else
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("Level is not loaded");
+			alert.setContentText("Please load file first");
+			alert.showAndWait().ifPresent(rs -> {
+			});
+		}
+	}
+	public void recordsWorldWide()
+	{
+		new Record();
+	}
+	
 	public void restartLevel()
 	{
 		if(!restartLevel.equals(""))
@@ -306,6 +327,7 @@ public class MainWindowController extends Observable implements View{
 		if(playingSound)
 			mediaPlayer.setAutoPlay(true);
 		this.mediaView = new MediaView(mediaPlayer);
+		this.borderPane.openDialog();
 	}
 }
 

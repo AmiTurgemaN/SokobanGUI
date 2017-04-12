@@ -2,7 +2,6 @@ package model.data.level;
 
 import java.io.Serializable;
 
-
 import model.data.gameObjects.Area;
 import model.data.gameObjects.Box;
 import model.data.gameObjects.GeneralGameObject;
@@ -24,9 +23,7 @@ public class Level implements Serializable{
 	private String levelString;
 	private String levelName;
 	private GeneralSokobanPolicy policy;
-	
 	public Level(){
-		
 	}
 
 	public GeneralIntegerPoint getPlayerLocation()
@@ -276,3 +273,4 @@ public class Level implements Serializable{
 	}
 
 }
+

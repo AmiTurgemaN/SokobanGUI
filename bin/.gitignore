@@ -1,2 +1,4 @@
+/db/
 /view/
+/hibernate.cfg.xml
 /model/

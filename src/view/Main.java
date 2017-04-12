@@ -1,10 +1,7 @@
 package view;
-	
-import java.io.FileInputStream;
 
+import java.io.FileInputStream;
 import controller.SokobanController;
-import controller.server.Server;
-import controller.server.SingleClientHandler;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.SokobanModel;
@@ -12,7 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
-
+import controller.server.Server;
+import controller.server.SingleClientHandler;
 
 public class Main extends Application {
 	@Override
@@ -20,7 +18,7 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
 
-			BorderPane root = (BorderPane)loader.load();
+			BorderPane root = (BorderPane) loader.load();
 			MainWindowController view = loader.getController();
 			view.setExitString("exit");
 			SokobanModel model = new SokobanModel();
@@ -28,7 +26,7 @@ public class Main extends Application {
 
 			model.addObserver(controller);
 			view.addObserver(controller);
-			Scene scene = new Scene(root,700,750);
+			Scene scene = new Scene(root, 700, 750);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.getIcons().add(new Image(new FileInputStream("resources/sokobanIcon.png")));
 			primaryStage.setTitle("Sokoban");
@@ -40,8 +38,7 @@ public class Main extends Application {
 				e.consume();
 				view.exit();
 			});
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
