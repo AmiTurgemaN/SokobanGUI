@@ -5,7 +5,6 @@ import db.HibernateUtil;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -30,9 +29,6 @@ import javafx.util.Callback;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.List;
-
-import org.hibernate.*;
 
 public class Record extends VBox {
 	private String levelName;
@@ -48,6 +44,10 @@ public class Record extends VBox {
 	public Record(String levelName) {
 		this.levelName = levelName;
 		showCurrentLevelRecords();
+	}
+	
+	public Record() {
+		showWorldWideRecords();
 	}
 
 	public void showCurrentLevelRecords() {
@@ -94,7 +94,7 @@ public class Record extends VBox {
 						showPlayerRecord(tablePosition.getTableColumn().getCellData(newValue).toString());
 				});
 
-				currentLevelTable.setItems(getLevelRecords(levelName));
+				currentLevelTable.setItems(HibernateUtil.getLevelRecords(levelName));
 				currentLevelTable.getColumns().addAll(playerNameColumn, timeColumn, moveColumn);
 				currentLevelTable.getSortOrder().add(moveColumn);
 				currentLevelTable.getSortOrder().add(timeColumn);
@@ -135,13 +135,13 @@ public class Record extends VBox {
 						{
 							if(searchField.getText().isEmpty())
 							{
-								currentLevelTable.setItems(getLevelRecords(levelName));
+								currentLevelTable.setItems(HibernateUtil.getLevelRecords(levelName));
 								currentLevelTable.getSortOrder().add(moveColumn);
 								currentLevelTable.getSortOrder().add(timeColumn);
 							}
 							else
 							{
-								currentLevelTable.setItems(getPlayerRecordsContain(searchField.getText(),levelName));
+								currentLevelTable.setItems(HibernateUtil.getPlayerRecordsContain(searchField.getText(),levelName));
 								currentLevelTable.getSortOrder().add(moveColumn);
 								currentLevelTable.getSortOrder().add(timeColumn);
 							}
@@ -154,12 +154,6 @@ public class Record extends VBox {
 
 
 	}
-
-
-	public Record() {
-		showWorldWideRecords();
-	}
-
 
 	public void showWorldWideRecords() {
 		Platform.runLater(new Runnable() {
@@ -208,7 +202,7 @@ public class Record extends VBox {
 					}
 				});
 
-				worldWideTable.setItems(getWorldWideRecords());
+				worldWideTable.setItems(HibernateUtil.getWorldWideRecords());
 				worldWideTable.getColumns().addAll(playerNameColumn, levelNameColumn, timeColumn, moveColumn);
 				worldWideTable.getSortOrder().add(moveColumn);
 				worldWideTable.getSortOrder().add(timeColumn);
@@ -256,7 +250,7 @@ public class Record extends VBox {
 						{
 							if(searchField.getText().isEmpty())
 							{
-								worldWideTable.setItems(getWorldWideRecords());
+								worldWideTable.setItems(HibernateUtil.getWorldWideRecords());
 								worldWideTable.getSortOrder().add(moveColumn);
 								worldWideTable.getSortOrder().add(timeColumn);
 							}
@@ -264,13 +258,13 @@ public class Record extends VBox {
 							{
 								if(levelRadioButton.isSelected())
 								{
-									worldWideTable.setItems(getLevelWorldWideRecordsContain(searchField.getText()));
+									worldWideTable.setItems(HibernateUtil.getLevelWorldWideRecordsContain(searchField.getText()));
 									worldWideTable.getSortOrder().add(moveColumn);
 									worldWideTable.getSortOrder().add(timeColumn);
 								}
 								else if(playerRadioButton.isSelected())
 								{
-									worldWideTable.setItems(getPlayerWorldWideRecordsContain(searchField.getText()));
+									worldWideTable.setItems(HibernateUtil.getPlayerWorldWideRecordsContain(searchField.getText()));
 									worldWideTable.getSortOrder().add(moveColumn);
 									worldWideTable.getSortOrder().add(timeColumn);
 								}
@@ -281,8 +275,6 @@ public class Record extends VBox {
 			}
 		});
 	}
-
-
 
 	public void showPlayerRecord(String playerName) {
 		Platform.runLater(new Runnable() {
@@ -315,7 +307,7 @@ public class Record extends VBox {
 
 				playerTable = new TableView<>();
 
-				playerTable.setItems(getPlayerRecord(playerName));
+				playerTable.setItems(HibernateUtil.getPlayerRecord(playerName));
 				playerTable.getColumns().addAll(levelNameColumn, timeColumn, moveColumn);
 				playerTable.getSortOrder().add(moveColumn);
 				playerTable.getSortOrder().add(timeColumn);
@@ -356,14 +348,14 @@ public class Record extends VBox {
 						{
 							if(searchField.getText().isEmpty())
 							{
-								playerTable.setItems(getPlayerRecord(playerName));
+								playerTable.setItems(HibernateUtil.getPlayerRecord(playerName));
 								playerTable.getSortOrder().add(moveColumn);
 								playerTable.getSortOrder().add(timeColumn);
 							}
 							else
 							{
 
-								playerTable.setItems(getLevelRecordsContain(searchField.getText(),playerName));
+								playerTable.setItems(HibernateUtil.getLevelRecordsContain(searchField.getText(),playerName));
 								playerTable.getSortOrder().add(moveColumn);
 								playerTable.getSortOrder().add(timeColumn);
 							}
@@ -375,86 +367,7 @@ public class Record extends VBox {
 	}
 
 
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	private ObservableList<Game> getPlayerRecord(String playerName) {
-		ObservableList<Game> levelRecordsList = FXCollections.observableArrayList();
-		Query<Game> query = HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
-		List<Game> gameList = query.list();
-		for (Game g : gameList) {
-			if (g.getPlayerName().equalsIgnoreCase(playerName))
-				levelRecordsList.add(g);
-		}
-		return levelRecordsList;
-	}
+	
 
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	private ObservableList<Game> getPlayerRecordsContain(String playerName,String levelName) {
-		ObservableList<Game> playerRecordList = FXCollections.observableArrayList();
-		Query<Game> query = HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
-		List<Game> gameList = query.list();
-		for (Game g : gameList) {
-			if (g.getPlayerName().toLowerCase().contains(playerName.toLowerCase()) && g.getLevelName().equalsIgnoreCase(levelName))
-				playerRecordList.add(g);
-		}
-		return playerRecordList;
-	}
-
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	private ObservableList<Game> getLevelRecordsContain(String levelName, String playerName) {
-		ObservableList<Game> levelRecordsList = FXCollections.observableArrayList();
-		Query<Game> query = HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
-		List<Game> gameList = query.list();
-		for (Game g : gameList) {
-			if (g.getLevelName().toLowerCase().contains(levelName.toLowerCase()) && g.getPlayerName().equalsIgnoreCase(playerName))
-				levelRecordsList.add(g);
-		}
-		return levelRecordsList;
-	}
-
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	private ObservableList<Game> getLevelWorldWideRecordsContain(String levelName) {
-		ObservableList<Game> levelRecordsList = FXCollections.observableArrayList();
-		Query<Game> query = HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
-		List<Game> gameList = query.list();
-		for (Game g : gameList) {
-			if (g.getLevelName().toLowerCase().contains(levelName.toLowerCase()))
-				levelRecordsList.add(g);
-		}
-		return levelRecordsList;
-	}
-
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	private ObservableList<Game> getPlayerWorldWideRecordsContain(String playerName) {
-		ObservableList<Game> levelRecordsList = FXCollections.observableArrayList();
-		Query<Game> query = HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
-		List<Game> gameList = query.list();
-		for (Game g : gameList) {
-			if (g.getPlayerName().toLowerCase().contains(playerName.toLowerCase()))
-				levelRecordsList.add(g);
-		}
-		return levelRecordsList;
-	}
-
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	private ObservableList<Game> getWorldWideRecords() {
-		ObservableList<Game> worldWideRecordsList = FXCollections.observableArrayList();
-		Query<Game> query = HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
-		List<Game> gameList = query.list();
-		for (Game g : gameList) {
-			worldWideRecordsList.add(g);
-		}
-		return worldWideRecordsList;
-	}
-
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	private ObservableList<Game> getLevelRecords(String levelName) {
-		ObservableList<Game> levelRecordsList = FXCollections.observableArrayList();
-		Query<Game> query = HibernateUtil.getSessionFactory().openSession().createQuery("from Games");
-		List<Game> gameList = query.list();
-		for (Game g : gameList) {
-			if (g.getLevelName().equalsIgnoreCase(levelName))
-				levelRecordsList.add(g);
-		}
-		return levelRecordsList;
-	}
+	
 }
