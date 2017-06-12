@@ -5,6 +5,7 @@ import controller.SokobanController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.SokobanModel;
+import sokobanSolver.SokobanSolver;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -50,6 +51,11 @@ public class Main extends Application {
 		{
 			Server server = new Server(Integer.parseInt(args[1]), new SingleClientHandler());
 			server.start();
+		}
+		else if(args.length==2)
+		{
+			SokobanSolver sokobanSolver = new SokobanSolver(args[0],args[1]);
+			sokobanSolver.solve();
 		}
 	}
 }

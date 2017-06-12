@@ -1,0 +1,24 @@
+package sokobanSolver;
+
+import java.io.PrintWriter;
+import java.util.List;
+
+public class SolverView implements View {
+
+	@Override
+	public void showSolution(List<String> solution,String fileName) {
+		
+		try {
+			PrintWriter w = new PrintWriter(fileName);
+			for(String s : solution)
+				if(s.lastIndexOf("\n")!=-1)
+					w.write(s);
+				else
+					w.write(s+"\n");
+			w.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}

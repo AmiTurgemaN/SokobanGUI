@@ -4,5 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Hibernate"/>
+	<classpathentry kind="lib" path="D:/עמית/Studies/המכללה למנהל/שנה ב/סימסטר ב/פיתוח תוכנה מתקדם 2/searchLib.jar"/>
+	<classpathentry kind="lib" path="D:/עמית/Studies/המכללה למנהל/שנה ב/סימסטר ב/פיתוח תוכנה מתקדם 2/strips.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
