@@ -2,6 +2,7 @@ package controller;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -9,6 +10,8 @@ import java.util.Observer;
 
 import controller.commands.CommandCreator;
 import controller.commands.GeneralCommand;
+import controller.commands.Help;
+import controller.commands.LevelList;
 import model.Model;
 import view.View;
 
@@ -31,7 +34,8 @@ public class SokobanController implements Observer {
 	private void initCommands() {
 		commands = new HashMap<String,GeneralCommand>();
 		try {
-			commands = new CommandCreator(new FileInputStream("Hash Maps/commandHashMap.obj")).getCommandsHashMap();
+			CommandCreator cc = new CommandCreator(new FileInputStream("Hash Maps/commandHashMap.obj"));
+			commands = cc.getCommandsHashMap();
 			for(Map.Entry<String, GeneralCommand> entry : commands.entrySet())
 			{
 				entry.getValue().setModel(model);
@@ -63,6 +67,7 @@ public class SokobanController implements Observer {
 		controller.insertCommand(command);	
 		if(params.equals(this.view.getExitString()))
 			this.controller.stop();
+		
 	}
 	
 	

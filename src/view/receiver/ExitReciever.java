@@ -32,6 +32,18 @@ public class ExitReciever extends GeneralReceiver {
 
 	@Override
 	public void action() {
+		out.print(exitString);
+		for(int i=0;i<=4;i++)
+		{
+			try {
+				Thread.sleep(200);
+				out.print(".");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		out.println();
 	}
 
 }

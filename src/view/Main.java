@@ -1,7 +1,13 @@
 package view;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
 import controller.SokobanController;
+import controller.commands.CommandCreator;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.SokobanModel;
@@ -47,6 +53,16 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		if(args.length==0)
 			launch(args);
+		else if(args.length==1 && args[0].toLowerCase().equals("cli"))
+		{
+			CLI view = new CLI(new BufferedReader(new InputStreamReader(System.in)),new PrintWriter(System.out),"exit");
+			SokobanModel model = new SokobanModel();
+			SokobanController controller = new SokobanController(model, view);
+
+			model.addObserver(controller);
+			view.addObserver(controller);
+			view.start();
+		}
 		else if(args.length==2 && args[0].equals("-server"))
 		{
 			Server server = new Server(Integer.parseInt(args[1]), new SingleClientHandler());

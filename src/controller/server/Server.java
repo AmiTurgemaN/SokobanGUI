@@ -39,16 +39,16 @@ public class Server extends Observable {
 		try
 		{
 			System.out.println("Waiting for user to connect");
-			Socket aClient=server.accept();
-			try {
-				System.out.println("User Connected");
-				ch.handleClinet(aClient.getInputStream(), aClient.getOutputStream(),"exit");
-				System.out.println("User Disconnected");
-				aClient.close();
-				System.exit(0);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				Socket aClient=server.accept();
+				try {
+					System.out.println("User Connected");
+					ch.handleClinet(aClient.getInputStream(), aClient.getOutputStream(),"exit");
+					System.out.println("User Disconnected");
+					aClient.close();
+					System.exit(0);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 		catch(SocketTimeoutException e)
 		{

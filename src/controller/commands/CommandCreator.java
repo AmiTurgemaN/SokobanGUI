@@ -85,14 +85,29 @@ public class CommandCreator implements Serializable{
 			return new Move(model);
 		}
 	}
+	private class helpCommandCreator implements Serializable{
+		protected static final long serialVersionUID = 1L;
+		public GeneralCommand create(Model model,View view) {
+			return new Help(model,view);
+		}
+	}
+	private class levelListCommandCreator implements Serializable{
+		protected static final long serialVersionUID = 1L;
+		public GeneralCommand create(Model model,View view) {
+			return new LevelList(model,view);
+		}
+	}
 	
-	private void initHash() {
+	public void initHash() {
 		this.commandsHashMap = new HashMap <String,GeneralCommand>();
 		this.commandsHashMap.put("save",new saveCommandCreator().create(model,view));
 		this.commandsHashMap.put("load",new loadCommandCreator().create(model,view));
 		this.commandsHashMap.put("display",new displayCommandCreator().create(model, view));
 		this.commandsHashMap.put("exit",new exitCommandCreator().create(model,view));
 		this.commandsHashMap.put("move",new moveCommandCreator().create(model,view));
+		this.commandsHashMap.put("help",new helpCommandCreator().create(model,view));
+		this.commandsHashMap.put("?",new helpCommandCreator().create(model,view));
+		this.commandsHashMap.put("levels",new levelListCommandCreator().create(model,view));
 	}
 	
 	public void serializeHash() throws FileNotFoundException, IOException
@@ -112,3 +127,4 @@ public class CommandCreator implements Serializable{
 	}
 	
 }
+

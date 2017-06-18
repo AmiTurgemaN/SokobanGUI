@@ -71,6 +71,7 @@ public class CLI extends Observable implements View,Serializable{
 				} while (!commandLine.equals(exitString));				
 			}
 		}).start();	
+		
 	}
 
 	@Override
