@@ -112,7 +112,6 @@ public class CLI extends Observable implements View,Serializable{
 		}
 		out.println();
 		out.flush();
-		System.exit(0);
 	}
 	@Override
 	public void updateCounter() {

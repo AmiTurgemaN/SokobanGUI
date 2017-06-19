@@ -15,7 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 import controller.server.Server;
-import controller.server.SingleClientHandler;
 
 public class Main extends Application {
 	@Override
@@ -63,7 +62,7 @@ public class Main extends Application {
 		}
 		else if(args.length==2 && args[0].equals("-server"))
 		{
-			Server server = new Server(Integer.parseInt(args[1]), new SingleClientHandler());
+			Server server = new Server(Integer.parseInt(args[1]));
 			server.start();
 		}
 		else if(args.length==2)

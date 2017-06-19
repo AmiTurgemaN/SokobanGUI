@@ -41,7 +41,6 @@ public class SingleClientHandler  extends Observable implements ClientHandler {
 			@Override
 			public void run() {
 				readInputAndSend(in, out, exitStr);
-				
 			}
 		});
 		return t;
