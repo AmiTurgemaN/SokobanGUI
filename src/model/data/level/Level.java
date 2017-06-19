@@ -201,7 +201,6 @@ public class Level implements Serializable{
 				case '\n':
 					break;
 				default :
-					System.out.println("Could not load "+this.getLevelName()+" file");
 					initLevel();
 					return;
 				}
@@ -236,7 +235,7 @@ public class Level implements Serializable{
 				default:
 					break;
 				}
-		if(boxes!=areas || player!=1)
+		if(boxes!=areas || player!=1 || boxes==0 || areas==0)
 			return false;
 		return true;
 	}

@@ -26,6 +26,8 @@ public class Help extends GeneralCommand {
 				+ "Display\n"
 				+ "Exit\n"
 				+ "Levels\n"
+				+ "Solve\n"
+				+ "Solve <File Name>\n"
 				+ "Load <File Name>\n"
 				+ "Move <Direction>\n"
 				+ "Save <File Name>");

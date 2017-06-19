@@ -67,8 +67,9 @@ public class Main extends Application {
 		}
 		else if(args.length==2)
 		{
-			SokobanSolver sokobanSolver = new SokobanSolver(args[0],args[1]);
-			sokobanSolver.solve();
+			SokobanSolver sokobanSolver = new SokobanSolver(args[0]);
+			sokobanSolver.loadLevel();
+			sokobanSolver.solve(args[1]);
 		}
 	}
 }

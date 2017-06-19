@@ -1,5 +1,7 @@
 package view;
 
+import java.io.PrintWriter;
+
 import model.data.level.Level;
 
 public interface View{
@@ -12,4 +14,5 @@ public interface View{
 	void updateCounter();
 	void showLevelDetails(Level level);
 	void levelCompleted();
+	PrintWriter getOut();
 }

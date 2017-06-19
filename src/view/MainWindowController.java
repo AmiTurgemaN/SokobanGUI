@@ -329,5 +329,10 @@ public class MainWindowController extends Observable implements View{
 		this.mediaView = new MediaView(mediaPlayer);
 		this.borderPane.openDialog();
 	}
+
+	@Override
+	public PrintWriter getOut() {
+		return null;
+	}
 }
 

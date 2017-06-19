@@ -45,10 +45,12 @@ public class SolverModel implements Model{
 				case ' ':kb.add(new SokPredicate("clearAt", "", i+","+j));break;
 				case 'A':kb.add(new SokPredicate("characterAt","", i+","+j));break;
 				case '@':boxCount++;kb.add(new SokPredicate("boxAt", "b"+boxCount, i+","+j));break;
-				case '$':boxCount++;kb.add(new SokPredicate("boxAt", "b"+boxCount, i+","+j));goal.add(new SokPredicate("boxAt", "?", i+","+j));break;
-				case '!':kb.add(new SokPredicate("characterAt","", i+","+j));goal.add(new SokPredicate("boxAt", "?", i+","+j));break;
+				case '$':boxCount++;kb.add(new SokPredicate("boxAt", "b"+boxCount, i+","+j));
+						goal.add(new SokPredicate("boxAt", "?", i+","+j));
+				case 'B':kb.add(new SokPredicate("characterAt","", i+","+j));
+						goal.add(new SokPredicate("boxAt", "?", i+","+j));
 				case 'o':goal.add(new SokPredicate("boxAt", "?", i+","+j));
-				kb.add(new SokPredicate("clearAt","", i+","+j));break;
+						kb.add(new SokPredicate("clearAt","", i+","+j));break;
 				}
 			}
 		return kb;		

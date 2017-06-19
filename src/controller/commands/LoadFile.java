@@ -89,14 +89,31 @@ public class LoadFile extends GeneralCommand {
 				view.displayError(Utilities.getExtension(this.commandArgs)+" extension is not supported.");
 				return;
 			}
-			this.inputStream = new FileInputStream ("Level Files/"+this.commandArgs);
-			this.generalLevelLoader = gllc.create();
+			if(levelExist())
+			{
+				this.inputStream = new FileInputStream ("Level Files/"+this.commandArgs);
+				this.generalLevelLoader = gllc.create();
+			}
+			else
+			{
+				view.displayError("Level doesn't exist");
+				return;
+			}
 		} catch (FileNotFoundException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		this.model.loadLevel(generalLevelLoader, inputStream);
 		setLevel();
+	}
+
+	private boolean levelExist() {
+		LevelList ll = new LevelList(model);
+		ll.initLevelList();
+		for(String levelName : ll.getListLevel())
+			if(levelName.toLowerCase().equals(this.commandArgs.toLowerCase()))
+				return true;
+		return false;
 	}
 
 	public void setLevel() {

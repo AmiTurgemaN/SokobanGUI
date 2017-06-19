@@ -97,6 +97,12 @@ public class CommandCreator implements Serializable{
 			return new LevelList(model,view);
 		}
 	}
+	private class solveCommandCreator implements Serializable{
+		protected static final long serialVersionUID = 1L;
+		public GeneralCommand create(Model model,View view) {
+			return new Solve(model,view);
+		}
+	}
 	
 	public void initHash() {
 		this.commandsHashMap = new HashMap <String,GeneralCommand>();
@@ -108,6 +114,7 @@ public class CommandCreator implements Serializable{
 		this.commandsHashMap.put("help",new helpCommandCreator().create(model,view));
 		this.commandsHashMap.put("?",new helpCommandCreator().create(model,view));
 		this.commandsHashMap.put("levels",new levelListCommandCreator().create(model,view));
+		this.commandsHashMap.put("solve",new solveCommandCreator().create(model,view));
 	}
 	
 	public void serializeHash() throws FileNotFoundException, IOException

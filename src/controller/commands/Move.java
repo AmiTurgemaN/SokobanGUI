@@ -30,7 +30,7 @@ public class Move extends GeneralCommand {
 	public void execute() {
 		if(this.commandArgs==null)
 		{
-			view.displayError("Invalid move command");
+			view.displayError("Move command require direction");
 			return;
 		}
 		switch (this.commandArgs) {
