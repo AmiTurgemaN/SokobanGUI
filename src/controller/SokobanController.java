@@ -2,7 +2,6 @@ package controller;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -10,8 +9,6 @@ import java.util.Observer;
 
 import controller.commands.CommandCreator;
 import controller.commands.GeneralCommand;
-import controller.commands.Help;
-import controller.commands.LevelList;
 import model.Model;
 import view.View;
 

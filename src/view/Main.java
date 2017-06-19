@@ -3,11 +3,9 @@ package view;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import controller.SokobanController;
-import controller.commands.CommandCreator;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.SokobanModel;
