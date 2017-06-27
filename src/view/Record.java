@@ -1,34 +1,6 @@
 package view;
 
-import db.Game;
-import db.HibernateUtil;
-import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TablePosition;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TableView.TableViewSelectionModel;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.util.Callback;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class Record extends VBox {
 	private String levelName;
@@ -50,8 +22,10 @@ public class Record extends VBox {
 		showWorldWideRecords();
 	}
 
-	public void showCurrentLevelRecords() {
+	//via server
+	public void showCurrentLevelRecords() {	/*
 		Platform.runLater(new Runnable() {
+		
 			@SuppressWarnings("unchecked")
 			@Override
 			public void run() {
@@ -151,11 +125,11 @@ public class Record extends VBox {
 			}
 
 		});
-
+*/
 
 	}
 
-	public void showWorldWideRecords() {
+	public void showWorldWideRecords() {/*
 		Platform.runLater(new Runnable() {
 			@SuppressWarnings("unchecked")
 			@Override
@@ -273,10 +247,10 @@ public class Record extends VBox {
 					}
 				});
 			}
-		});
+		});*/
 	}
 
-	public void showPlayerRecord(String playerName) {
+	public void showPlayerRecord(String playerName) {/*
 		Platform.runLater(new Runnable() {
 			@SuppressWarnings("unchecked")
 			@Override
@@ -363,7 +337,7 @@ public class Record extends VBox {
 					}
 				});
 			}
-		});
+		});*/
 	}
 
 

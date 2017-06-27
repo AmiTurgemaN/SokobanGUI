@@ -7,8 +7,6 @@ import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import db.Game;
-import db.GameManager;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -311,9 +309,10 @@ public class CustomizedBorderPane extends BorderPane {
 				}
 				Optional<String> result = dialog.showAndWait();
 				if (result.isPresent()){
-					Game game = new Game(dialog.getResult(), levelName, moveCount, seconds+60*(minutes+60*hours));
-					GameManager gameManager = new GameManager(game);
-					gameManager.addGame();
+					//send game to server
+					//Game game = new Game(dialog.getResult(), levelName, moveCount, seconds+60*(minutes+60*hours));
+					//GameManager gameManager = new GameManager(game);
+					//gameManager.addGame();
 				}
 			}
 		});

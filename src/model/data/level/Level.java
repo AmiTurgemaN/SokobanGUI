@@ -22,6 +22,15 @@ public class Level implements Serializable{
 	private boolean completed;
 	private String levelString;
 	private String levelName;
+	private String userName;
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	private GeneralSokobanPolicy policy;
 	public Level(){
 	}

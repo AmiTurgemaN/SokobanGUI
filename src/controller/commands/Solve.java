@@ -1,7 +1,6 @@
 package controller.commands;
 
 import model.Model;
-import sokobanSolver.SokobanSolver;
 import view.View;
 
 public class Solve extends GeneralCommand {
@@ -27,8 +26,8 @@ public class Solve extends GeneralCommand {
 			}
 			if(!this.model.getLevel().isCompleted())
 			{
-				SokobanSolver sokobanSolver = new SokobanSolver(this.model.getLevel());
-				sokobanSolver.solve(this.commandArgs);
+//				SokobanSolver sokobanSolver = new SokobanSolver(this.model.getLevel());
+//				sokobanSolver.solve(this.commandArgs);
 			}
 			else
 			{
@@ -40,13 +39,13 @@ public class Solve extends GeneralCommand {
 		{
 			if(this.model.getLevel()==null)
 			{
-				view.displayError("Level not loaded");
+//				view.displayError(Level not loaded");
 				return;
 			}
 			else if(!this.model.getLevel().isCompleted())
 			{
-				SokobanSolver sokobanSolver = new SokobanSolver(this.model.getLevel());
-				sokobanSolver.solve(this.view.getOut());
+//				SokobanSolver sokobanSolver = new SokobanSolver(this.model.getLevel());
+//				sokobanSolver.solve(this.view.getOut());
 			}
 			else
 			{

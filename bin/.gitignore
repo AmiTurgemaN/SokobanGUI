@@ -1,4 +1,5 @@
+/controller/
 /view/
 /model/
-/sokobanSolver/
-/controller/
+/beans/
+/data/
