@@ -2,10 +2,14 @@ package view;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Observable;
+import java.util.Optional;
+import java.util.Random;
 
+import controller.Client;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,11 +17,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.data.level.Level;
 import model.data.util.Utilities;
@@ -44,11 +50,13 @@ public class MainWindowController extends Observable implements View{
 	playersBorderPane players;
 	MediaPlayer mediaPlayer;
 	AboutWindow aboutWindow;
-	
+
 
 	private Keys keys;
 	private String exitString;
 	private boolean playingSound;
+	private Client client;
+
 	public void setExitString(String exitString) {
 		this.exitString = exitString;
 	}
@@ -63,6 +71,14 @@ public class MainWindowController extends Observable implements View{
 		this.borderPane=new CustomizedBorderPane();
 		initKeys();
 		players = new playersBorderPane();
+		this.client = new Client("localhost",5559);
+		enterName();
+		this.client.connect();
+		try {
+			this.client.getOutToServer().writeObject(this.client.getUserName());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 
@@ -91,9 +107,9 @@ public class MainWindowController extends Observable implements View{
 		}
 		else
 		{	if(mediaView.getMediaPlayer()!=null)
-				mediaView.getMediaPlayer().play();
-			this.playingSound=true;
-			this.soundMenu.setText("Disable Sound");
+			mediaView.getMediaPlayer().play();
+		this.playingSound=true;
+		this.soundMenu.setText("Disable Sound");
 		}
 	}
 
@@ -116,7 +132,7 @@ public class MainWindowController extends Observable implements View{
 	{
 		aboutWindow = new AboutWindow();
 	}
-	
+
 	public void recordsCurrentLevel()
 	{ 
 		if(this.levelDisplayer.getLevel()!=null)
@@ -137,7 +153,7 @@ public class MainWindowController extends Observable implements View{
 	{
 		new Record();
 	}
-	
+
 	public void restartLevel()
 	{
 		if(!restartLevel.equals(""))
@@ -333,6 +349,38 @@ public class MainWindowController extends Observable implements View{
 	@Override
 	public PrintWriter getOut() {
 		return null;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public void enterName()
+	{
+		TextInputDialog dialog;
+		dialog = new TextInputDialog();
+		dialog.setTitle("Welcome");
+		dialog.setHeaderText("Connecting to server");
+		dialog.setContentText("Please enter your name:");
+		Stage stage=(Stage)dialog.getDialogPane().getScene().getWindow();
+		try {
+			stage.getIcons().add(new Image(new FileInputStream("resources/addPlayer.png")));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+			client.setUserName(result.get());
+		}
+		if(client.getUserName()==null || client.getUserName().equals(""))
+		{
+			Random r = new Random();
+			client.setUserName("Player"+r.nextInt(1000));
+		}
 	}
 }
 

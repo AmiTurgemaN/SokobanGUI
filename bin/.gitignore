@@ -1,5 +1,5 @@
+/common/
 /controller/
-/view/
+/hibernate.cfg.xml
 /model/
-/beans/
-/data/
+/view/

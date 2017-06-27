@@ -9,9 +9,8 @@ public class Level implements Serializable {
 	public Level() {
 	}
 	
-	public Level(String levelName, String userName, String levelString) {
+	public Level(String levelName, String levelString) {
 		this.levelName = levelName;
-		this.userName = userName;
 		this.levelString = levelString;
 	}
 	
