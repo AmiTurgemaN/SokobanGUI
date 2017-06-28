@@ -15,25 +15,12 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
-			/*String levelString = readStringFromFile("Level Files/level1.txt");
-			System.out.println(levelString);
-			Level level = new Level();
-			level.setLevelName("level16");
-			level.setUserName("client1");
-			level.setLevelString(levelString);
-			Client client = new Client();
-			client.start("127.0.0.1", 5558, level);
-			*/
-			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
-
 			BorderPane root = (BorderPane) loader.load();
 			MainWindowController view = loader.getController();
 			view.setExitString("exit");
 			SokobanModel model = new SokobanModel();
 			SokobanController controller = new SokobanController(model, view);
-			
 			model.addObserver(controller);
 			view.addObserver(controller);
 			Scene scene = new Scene(root, 700, 750);

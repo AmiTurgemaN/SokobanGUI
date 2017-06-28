@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,6 +32,7 @@ public class CustomizedBorderPane extends BorderPane {
 	Text moveCounterText;
 	Text errorText;
 	TextInputDialog dialog;
+	Button solveButton;
 
 	private StringProperty moveCountString;
 	private StringProperty levelNameString;
@@ -99,6 +101,7 @@ public class CustomizedBorderPane extends BorderPane {
 		levelNameString = new SimpleStringProperty(levelNameText.getText());
 		levelNameText.textProperty().bind(levelNameString);
 		GridPane grid = addGridPane(level);
+		
 		Platform.runLater(new Runnable(){
 			@Override
 			public void run() {
@@ -288,7 +291,7 @@ public class CustomizedBorderPane extends BorderPane {
 		moveCounterText.setFill(Color.BLACK);
 		GridPane.setValignment(moveCounterText, VPos.BOTTOM);
 		grid.add(moveCounterText, 0, 3);
-
+				
 		return grid;
 	}
 

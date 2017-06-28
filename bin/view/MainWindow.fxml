@@ -36,6 +36,7 @@
 							text="Save File" />
 						<MenuItem mnemonicParsing="false" onAction="#restartLevel"
 							text="Restart Level" />
+						<MenuItem mnemonicParsing="false" onAction="#solveLevel" text="Solve level" />
 						<MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
 					</items>
 				</Menu>

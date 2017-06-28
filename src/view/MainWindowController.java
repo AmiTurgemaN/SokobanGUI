@@ -56,6 +56,7 @@ public class MainWindowController extends Observable implements View{
 	private String exitString;
 	private boolean playingSound;
 	private Client client;
+	private String currentLevelName;
 
 	public void setExitString(String exitString) {
 		this.exitString = exitString;
@@ -65,21 +66,17 @@ public class MainWindowController extends Observable implements View{
 		this.command="";
 		this.restartLevel="";
 		this.playingSound=true;
+		this.currentLevelName="";
 		initMusic();
 		levelDisplayer = new LevelDisplayer();
 		levelDisplayer.requestFocus();
 		this.borderPane=new CustomizedBorderPane();
 		initKeys();
 		players = new playersBorderPane();
-		this.client = new Client("localhost",5554);
+		this.client = new Client("localhost",5555);
 		enterName();
 		this.client.connect();
-		try {
-			this.client.getOutToServer().writeObject("USERNAME"+this.client.getUserName());
-			this.client.getOutToServer().flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
 	}
 
 
@@ -185,6 +182,46 @@ public class MainWindowController extends Observable implements View{
 			});
 		}
 	}
+	
+	public void solveLevel()
+	{
+		if(currentLevelName.equals(""))
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("Level is not loaded");
+			alert.setContentText("Please load file first");
+			alert.showAndWait().ifPresent(rs -> {
+			});
+		}
+		else
+		{
+			model.data.beans.Level levelToSolve = new model.data.beans.Level();
+			levelToSolve.setLevelName(currentLevelName);
+			levelToSolve.setLevelString(levelDisplayer.getLevel().getLevelString());
+			String solution = client.getSolution(levelToSolve);
+			if(solution.equals("") || solution.equals("Unsolvable"))
+			{
+				System.out.println(solution);
+				displayError("Level cannot be solved");
+			}
+			else
+			{
+				String [] moveCommands = solution.split("\n");
+				for(String command : moveCommands)
+				{
+					System.out.println(command);
+					setChanged();
+					notifyObservers(command);
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
 
 	public void openFile()
 	{
@@ -209,6 +246,7 @@ public class MainWindowController extends Observable implements View{
 			initMusic();
 			if(this.playingSound==true)
 				mediaView.getMediaPlayer().setAutoPlay(true);
+			this.currentLevelName=chosen.getName();
 			this.command = "load "+chosen.getName();
 			this.restartLevel="load "+chosen.getName();
 			setChanged();
@@ -382,6 +420,14 @@ public class MainWindowController extends Observable implements View{
 			Random r = new Random();
 			client.setUserName("Player"+r.nextInt(1000));
 		}
+	}
+
+	public String getCurrentLevelName() {
+		return currentLevelName;
+	}
+
+	public void setCurrentLevelName(String currentLevelName) {
+		this.currentLevelName = currentLevelName;
 	}
 }
 

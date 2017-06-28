@@ -5,10 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Observable;
 
 import model.data.beans.Level;
 
-public class Client {
+public class Client extends Observable{
 
 	private String ip;
 	private int port;
@@ -21,7 +22,7 @@ public class Client {
 	public Client(String ip, int port) {
 		this.ip=ip;
 		this.port=port;
-	}
+	}	
 
 	public void connect()
 	{
@@ -36,22 +37,33 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		try {
+			outToServer.writeObject("USERNAME"+this.userName);
+			outToServer.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void start(Level level) {
+	public String getSolution(Level level) {
+		String solution="";
 		try {
-			level.setUserName(this.userName);
 			outToServer.writeObject(level);
 			outToServer.flush();
-			String solution="";
 			try {
 				solution = (String)serverInput.readObject();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Solution received from server:\n" + solution);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return solution;
+	}
 
+	public void stop()
+	{
+		try {
 			serverInput.close();
 			outToServer.close();
 			socket.close();
