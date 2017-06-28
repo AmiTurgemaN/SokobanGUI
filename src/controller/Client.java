@@ -1,8 +1,7 @@
 package controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -15,7 +14,7 @@ public class Client {
 	private int port;
 	private Socket socket;
 	private Level level;
-	private BufferedReader serverInput;
+	private ObjectInputStream serverInput;
 	private ObjectOutputStream outToServer;
 	private String userName;
 
@@ -29,8 +28,9 @@ public class Client {
 		try {
 			this.socket = new Socket(ip, port);
 			System.out.println(userName +" has connected to server");
-			serverInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			outToServer = new ObjectOutputStream(socket.getOutputStream());
+			outToServer.flush();
+			serverInput = new ObjectInputStream(socket.getInputStream());
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -42,11 +42,14 @@ public class Client {
 		try {
 			level.setUserName(this.userName);
 			outToServer.writeObject(level);
+			outToServer.flush();
 			String solution="";
-			String line;
-			while ((line = serverInput.readLine()) != null)
-				solution += line+"\n";
-
+			try {
+				solution = (String)serverInput.readObject();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("Solution received from server:\n" + solution);
 
 			serverInput.close();
@@ -71,14 +74,6 @@ public class Client {
 
 	public void setSocket(Socket socket) {
 		this.socket = socket;
-	}
-
-	public BufferedReader getServerInput() {
-		return serverInput;
-	}
-
-	public void setServerInput(BufferedReader serverInput) {
-		this.serverInput = serverInput;
 	}
 
 	public ObjectOutputStream getOutToServer() {
@@ -111,5 +106,13 @@ public class Client {
 
 	public void setPort(int port) {
 		this.port = port;
+	}
+
+	public ObjectInputStream getServerInput() {
+		return serverInput;
+	}
+
+	public void setServerInput(ObjectInputStream serverInput) {
+		this.serverInput = serverInput;
 	}
 }

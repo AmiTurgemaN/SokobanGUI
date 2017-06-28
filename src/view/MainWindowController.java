@@ -71,11 +71,12 @@ public class MainWindowController extends Observable implements View{
 		this.borderPane=new CustomizedBorderPane();
 		initKeys();
 		players = new playersBorderPane();
-		this.client = new Client("localhost",5559);
+		this.client = new Client("localhost",5554);
 		enterName();
 		this.client.connect();
 		try {
-			this.client.getOutToServer().writeObject(this.client.getUserName());
+			this.client.getOutToServer().writeObject("USERNAME"+this.client.getUserName());
+			this.client.getOutToServer().flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
