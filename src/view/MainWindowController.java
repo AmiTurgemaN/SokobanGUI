@@ -201,24 +201,30 @@ public class MainWindowController extends Observable implements View{
 			levelToSolve.setLevelString(levelDisplayer.getLevel().getLevelString());
 			String solution = client.getSolution(levelToSolve);
 			if(solution.equals("") || solution.equals("Unsolvable"))
-			{
+			{ 
 				System.out.println(solution);
 				displayError("Level cannot be solved");
 			}
 			else
 			{
 				String [] moveCommands = solution.split("\n");
-				for(String command : moveCommands)
-				{
-					System.out.println(command);
-					setChanged();
-					notifyObservers(command);
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						for(String command : moveCommands)
+						{
+							System.out.println(command);
+							setChanged();
+							notifyObservers(command);
+							try {
+								Thread.sleep(500);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
 					}
-				}
+				}).start();;
 			}
 		}
 	}
@@ -382,7 +388,7 @@ public class MainWindowController extends Observable implements View{
 		if(playingSound)
 			mediaPlayer.setAutoPlay(true);
 		this.mediaView = new MediaView(mediaPlayer);
-		this.borderPane.openDialog();
+		this.borderPane.openDialog(client.getUserName());
 	}
 
 	@Override

@@ -295,12 +295,12 @@ public class CustomizedBorderPane extends BorderPane {
 		return grid;
 	}
 
-	public void openDialog() {
+	public void openDialog(String userName) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				DecimalFormat df = new DecimalFormat("00");
-				dialog = new TextInputDialog();
+				dialog = new TextInputDialog(userName);
 				dialog.setTitle("Level completed");
 				dialog.setHeaderText("Number of moves : "+moveCount+"\nTotal time : "+df.format(hours)+":"+df.format(minutes)+":"+df.format(seconds));
 				dialog.setContentText("Please enter your name:");
