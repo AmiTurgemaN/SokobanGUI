@@ -2,11 +2,13 @@ package view;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import controller.Client;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -22,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.data.beans.hibernate.Game;
 import model.data.level.Level;
 
 public class CustomizedBorderPane extends BorderPane {
@@ -295,12 +298,12 @@ public class CustomizedBorderPane extends BorderPane {
 		return grid;
 	}
 
-	public void openDialog(String userName) {
+	public void openDialog(Client client) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				DecimalFormat df = new DecimalFormat("00");
-				dialog = new TextInputDialog(userName);
+				dialog = new TextInputDialog(client.getUserName());
 				dialog.setTitle("Level completed");
 				dialog.setHeaderText("Number of moves : "+moveCount+"\nTotal time : "+df.format(hours)+":"+df.format(minutes)+":"+df.format(seconds));
 				dialog.setContentText("Please enter your name:");
@@ -312,10 +315,13 @@ public class CustomizedBorderPane extends BorderPane {
 				}
 				Optional<String> result = dialog.showAndWait();
 				if (result.isPresent()){
-					//send game to server
-					//Game game = new Game(dialog.getResult(), levelName, moveCount, seconds+60*(minutes+60*hours));
-					//GameManager gameManager = new GameManager(game);
-					//gameManager.addGame();
+					Game game = new Game(dialog.getResult(), levelName, moveCount, seconds+60*(minutes+60*hours));
+					try {
+						client.getOutToServer().writeObject(game);
+						client.getOutToServer().flush();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});

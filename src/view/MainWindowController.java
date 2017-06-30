@@ -135,7 +135,7 @@ public class MainWindowController extends Observable implements View{
 	{ 
 		if(this.levelDisplayer.getLevel()!=null)
 		{
-			new Record(borderPane.getLevelName());
+			new Record(borderPane.getLevelName(),client);
 		}
 		else
 		{
@@ -149,7 +149,7 @@ public class MainWindowController extends Observable implements View{
 	}
 	public void recordsWorldWide()
 	{
-		new Record();
+		new Record(client);
 	}
 
 	public void restartLevel()
@@ -388,7 +388,7 @@ public class MainWindowController extends Observable implements View{
 		if(playingSound)
 			mediaPlayer.setAutoPlay(true);
 		this.mediaView = new MediaView(mediaPlayer);
-		this.borderPane.openDialog(client.getUserName());
+		this.borderPane.openDialog(client);
 	}
 
 	@Override
